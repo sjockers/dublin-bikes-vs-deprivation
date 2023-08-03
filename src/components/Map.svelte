@@ -7,9 +7,9 @@
 		getMap: () => map
 	});
 
-	export let lat: number;
-	export let lon: number;
 	export let zoom: number = 8;
+	export let center: mapbox.LngLatLike | undefined = undefined;
+	export let bounds: mapbox.LngLatBoundsLike | undefined = undefined;
 
 	let container: HTMLDivElement;
 	let map: mapbox.Map;
@@ -18,8 +18,9 @@
 		map = new mapbox.Map({
 			container,
 			style: 'mapbox://styles/mapbox/light-v9',
-			center: [lon, lat],
-			zoom
+			zoom,
+			center,
+			bounds
 		});
 	});
 
