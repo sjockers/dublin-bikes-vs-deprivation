@@ -1,5 +1,6 @@
 <script>
 	import Map from '../components/Map.svelte';
+	import ChoroplethLayer from '../components/ChoroplethLayer.svelte';
 </script>
 
 <!-- TODO: Use bounding box instead of lat/lon? -->
@@ -9,6 +10,7 @@
 		[-6.1148829, 53.4105416]
 	]}
 >
+	<ChoroplethLayer />
 	<!-- TODO: Add extra layer for map labels? -->
 
 	<!-- TODO: Add bike path layer here -->
