@@ -1,7 +1,9 @@
 <script>
 	import { getContext, onMount } from 'svelte';
 	import { mapbox, key } from './mapbox.js';
+	import { assets } from '$app/paths';
 
+	const basePath = import.meta.env.BASE_URL;
 	const { getMap } = getContext(key);
 	const map = getMap();
 
@@ -9,7 +11,7 @@
 		map.on('load', () => {
 			map.addSource('planned-network', {
 				type: 'geojson',
-				data: '/data/planned_network.geojson'
+				data: `${assets}/data/planned_network.geojson`
 			});
 
 			map.addLayer({

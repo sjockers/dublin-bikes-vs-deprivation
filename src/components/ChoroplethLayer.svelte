@@ -1,6 +1,7 @@
 <script>
 	import { getContext, onMount } from 'svelte';
 	import { mapbox, key } from './mapbox.js';
+	import { assets } from '$app/paths';
 
 	const { getMap } = getContext(key);
 	const map = getMap();
@@ -75,7 +76,7 @@
 		map.on('load', () => {
 			map.addSource('choropleth', {
 				type: 'geojson',
-				data: '/data/deprivation_by_ed.geojson'
+				data: `${assets}/data/deprivation_by_ed.geojson`
 			});
 
 			map.addLayer({
