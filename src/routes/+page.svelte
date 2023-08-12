@@ -2,6 +2,9 @@
 	import Map from '../components/Map.svelte';
 	import ChoroplethLayer from '../components/ChoroplethLayer.svelte';
 	import NetworkLayer from '../components/NetworkLayer.svelte';
+	import MeassurementLayer from '../components/MeassurementLayer.svelte';
+
+	let meassurementLayerActive = false;
 </script>
 
 <!-- TODO: Use bounding box instead of lat/lon? -->
@@ -15,6 +18,14 @@
 	<ChoroplethLayer />
 
 	<NetworkLayer />
+
+	{#if meassurementLayerActive}
+		<MeassurementLayer />
+	{:else}
+		<button class="activate-meassurement" on:click={() => (meassurementLayerActive = true)}>
+			Measure distance
+		</button>
+	{/if}
 
 	<!-- TODO: Add bike path layer here -->
 
@@ -30,5 +41,13 @@
 		padding: 0;
 		width: 100%;
 		border: none;
+	}
+
+	.activate-meassurement {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		z-index: 1;
+		display: flex;
 	}
 </style>
