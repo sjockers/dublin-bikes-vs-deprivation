@@ -19,7 +19,7 @@
 	// -20 to -30, very disadvantaged, orange
 	// below -30, extremely disadvantaged, red
 
-	const categories = [
+	const CATEGORIES = [
 		{
 			stop: -Infinity,
 			range: 'below -30',
@@ -70,7 +70,23 @@
 		}
 	];
 
-	const stops = categories.map(({ stop, color }) => [stop, color]);
+	function getCategory(value) {
+		for (let i = 0; i < CATEGORIES.length; i++) {
+			if (value <= CATEGORIES[i].stop) {
+				return CATEGORIES[i - 1];
+			}
+		}
+	}
+
+	function getStepsFromCategories() {
+		const stops = [];
+		for (let i = 0; i < CATEGORIES.length; i++) {
+			stops.push(CATEGORIES[i].color);
+			const upperBound = CATEGORIES[i + 1];
+			if (upperBound) stops.push(upperBound.stop);
+		}
+		return stops;
+	}
 
 	onMount(() => {
 		map.on('load', () => {
@@ -84,11 +100,12 @@
 				type: 'fill',
 				source: 'choropleth',
 				paint: {
-					'fill-color': {
-						property: 'HP2016rel',
-						stops
-					},
-					'fill-opacity': 0.5
+					// 'fill-color': {
+					// 	property: 'HP2016rel',
+					// 	stops
+					// },
+					'fill-color': ['step', ['get', 'HP2016rel'], ...getStepsFromCategories()],
+					'fill-opacity': 0.4
 				}
 			});
 
@@ -105,8 +122,13 @@
 				// Get the feature that the user is hovering over
 				const { properties } = e.features[0];
 
+				// Get the category
+				const { color, title } = getCategory(properties.HP2016rel);
+
 				// Set the popup content
-				const tooltipText = `<b>${properties.ED_Name}:</b> ${properties.HP2016rel}`;
+				let tooltipText = `<b>${properties.ED_Name}:</b>`;
+				tooltipText += `<br>Deprivation index: ${properties.HP2016rel}`;
+				tooltipText += `<br><b style="background:${color}">${title}</b>`;
 				popup.setLngLat(e.lngLat).setHTML(tooltipText).addTo(map);
 			});
 
