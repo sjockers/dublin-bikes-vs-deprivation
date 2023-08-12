@@ -3,7 +3,6 @@
 	import { mapbox, key } from './mapbox.js';
 	import { assets } from '$app/paths';
 
-	const basePath = import.meta.env.BASE_URL;
 	const { getMap } = getContext(key);
 	const map = getMap();
 
@@ -19,8 +18,21 @@
 				type: 'fill',
 				source: 'planned-network',
 				paint: {
-					'fill-color': '#f00',
-					'fill-opacity': 0.5
+					'fill-opacity': 1,
+					'fill-color': [
+						'match',
+						['get', 'Project_Status'],
+						'Scope and Purpose',
+						'#EF1313',
+						'Design and Consultation',
+						'#EC731B',
+						'Construction and Implementation',
+						'#3820E9',
+						'Complete',
+						'#51BE51',
+						/* Fallback color: */
+						'#000000'
+					]
 				}
 			});
 
@@ -39,8 +51,8 @@
 
 				// Set the popup content
 				let tooltipText = `<b>${properties.Description}</b>`;
-				tooltipText += `<br>Delivery phase: ${properties.Delivery_Phase}`;
 				tooltipText += `<br>Project status: ${properties.Project_Status}`;
+				tooltipText += `<br>Delivery phase: ${properties.Delivery_Phase}`;
 				tooltipText += `<br>Interim scheme: ${properties.Interim_Scheme}`;
 				popup.setLngLat(e.lngLat).setHTML(tooltipText).addTo(map);
 			});
