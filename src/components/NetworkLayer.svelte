@@ -6,6 +6,19 @@
 	const { getMap } = getContext(key);
 	const map = getMap();
 
+	const CATEGORIES = {
+		'Scope and Purpose': '#EF1313',
+		'Design and Consultation': '#EC731B',
+		'Construction and Implementation': '#3820E9',
+		Complete: '#51BE51'
+	};
+
+	const colorStops = [];
+	Object.entries(CATEGORIES).map(([key, value]) => {
+		colorStops.push(key);
+		colorStops.push(value);
+	});
+
 	onMount(() => {
 		map.on('load', () => {
 			map.addSource('planned-network', {
@@ -19,20 +32,7 @@
 				source: 'planned-network',
 				paint: {
 					'fill-opacity': 1,
-					'fill-color': [
-						'match',
-						['get', 'Project_Status'],
-						'Scope and Purpose',
-						'#EF1313',
-						'Design and Consultation',
-						'#EC731B',
-						'Construction and Implementation',
-						'#3820E9',
-						'Complete',
-						'#51BE51',
-						/* Fallback color: */
-						'#000000'
-					]
+					'fill-color': ['match', ['get', 'Project_Status'], ...colorStops, '#000']
 				}
 			});
 
@@ -48,10 +48,12 @@
 
 				// Get the feature that the user is hovering over
 				const { properties } = e.features[0];
+				const color = CATEGORIES[properties.Project_Status];
 
 				// Set the popup content
 				let tooltipText = `<b>${properties.Description}</b>`;
-				tooltipText += `<br>Project status: ${properties.Project_Status}`;
+				tooltipText += `<br>Project status: `;
+				tooltipText += `<b style="color:${color}">${properties.Project_Status}</b>`;
 				tooltipText += `<br>Delivery phase: ${properties.Delivery_Phase}`;
 				tooltipText += `<br>Interim scheme: ${properties.Interim_Scheme}`;
 				popup.setLngLat(e.lngLat).setHTML(tooltipText).addTo(map);
