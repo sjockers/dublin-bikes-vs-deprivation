@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { onDestroy, onMount, setContext } from 'svelte';
-	import { mapbox, key } from './mapbox.js';
+	import { mapbox, key } from './mapbox';
+	import type mapboxgl from 'mapbox-gl';
 	import 'mapbox-gl/dist/mapbox-gl.css';
 
-	setContext(key, {
+	interface MapboxContext {
+		getMap: () => mapboxgl.Map;
+	}
+
+	const mapboxContext: MapboxContext = {
 		getMap: () => map
-	});
+	};
+
+	setContext(key, mapboxContext);
 
 	export let zoom: number = 8;
 	export let center: mapbox.LngLatLike | undefined = undefined;

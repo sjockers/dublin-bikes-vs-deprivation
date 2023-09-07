@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 	import { getContext, onMount } from 'svelte';
-	import { mapbox, key } from './mapbox.js';
+	import { mapbox, key, type MapContext } from './mapbox';
 	import { assets } from '$app/paths';
 
-	const { getMap } = getContext(key);
+	const { getMap } = getContext<MapContext>(key);
 	const map = getMap();
 
 	// Original labeling suggestions based on:
@@ -70,12 +70,13 @@
 		}
 	];
 
-	function getCategory(value) {
+	function getCategory(value: number) {
 		for (let i = 0; i < CATEGORIES.length; i++) {
 			if (value <= CATEGORIES[i].stop) {
 				return CATEGORIES[i - 1];
 			}
 		}
+		return { color: '#dadada', title: 'unknown' };
 	}
 
 	function getStepsFromCategories() {
@@ -115,12 +116,13 @@
 				closeOnClick: false
 			});
 
-			map.on('mousemove', 'choropleth-layer', (e) => {
+			map.on('mousemove', 'choropleth-layer', ({ features = [], lngLat }) => {
+				// Get the feature that the user is hovering over
+				const { properties } = features[0];
+				if (!properties) return;
+
 				// Change the cursor style as a UI indicator
 				map.getCanvas().style.cursor = 'pointer';
-
-				// Get the feature that the user is hovering over
-				const { properties } = e.features[0];
 
 				// Get the category
 				const { color, title } = getCategory(properties.HP2016rel);
@@ -129,7 +131,7 @@
 				let tooltipText = `<b>${properties.ED_Name}:</b>`;
 				tooltipText += `<br>Deprivation index: ${properties.HP2016rel}`;
 				tooltipText += `<br><b style="background:${color}">${title}</b>`;
-				popup.setLngLat(e.lngLat).setHTML(tooltipText).addTo(map);
+				popup.setLngLat(lngLat).setHTML(tooltipText).addTo(map);
 			});
 
 			map.on('mouseleave', 'choropleth-layer', () => {

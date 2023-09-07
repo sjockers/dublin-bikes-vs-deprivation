@@ -1,27 +1,35 @@
-<script>
+<script lang="ts">
 	import { getContext, onMount } from 'svelte';
-	import { mapbox, key } from './mapbox.js';
+	import { key, type MapContext } from './mapbox';
 	import length from '@turf/length';
-	import { assets } from '$app/paths';
+	import type {
+		Feature,
+		FeatureCollection,
+		GeoJsonProperties,
+		Geometry,
+		LineString,
+		Point
+	} from 'geojson';
 
-	const { getMap } = getContext(key);
+	const { getMap } = getContext<MapContext>(key);
 	const map = getMap();
 	let distance = 0;
-	let coordinates = [];
+	let coordinates: [number, number][] = [];
 
 	// GeoJSON object to hold our measurement features
-	const geojson = {
+	const geojson: FeatureCollection = {
 		type: 'FeatureCollection',
 		features: []
 	};
 
 	// Used to draw a line between points
-	const linestring = {
+	const linestring: Feature<LineString, GeoJsonProperties> = {
 		type: 'Feature',
 		geometry: {
 			type: 'LineString',
 			coordinates
-		}
+		},
+		properties: {}
 	};
 
 	onMount(() => {
@@ -56,28 +64,26 @@
 			filter: ['in', '$type', 'LineString']
 		});
 
-		map.on('click', (e) => {
-			const features = map.queryRenderedFeatures(e.point, {
+		map.on('click', ({ point, lngLat }) => {
+			const features = map.queryRenderedFeatures(point, {
 				layers: ['measure-points']
 			});
+			// if (!features.length) return;
 
 			// Remove the linestring from the group
 			// so we can redraw it based on the points collection.
 			if (geojson.features.length > 1) geojson.features.pop();
 
-			// Clear the distance container to populate it with a new value.
-			// TODO: distanceContainer.innerHTML = '';
-
 			// If a feature was clicked, remove it from the map.
 			if (features.length) {
-				const id = features[0].properties.id;
-				geojson.features = geojson.features.filter((point) => point.properties.id !== id);
+				const id = features[0].properties?.id;
+				geojson.features = geojson.features.filter((point) => point.properties?.id !== id);
 			} else {
-				const point = {
+				const point: Feature<Point, GeoJsonProperties> = {
 					type: 'Feature',
 					geometry: {
 						type: 'Point',
-						coordinates: [e.lngLat.lng, e.lngLat.lat]
+						coordinates: [lngLat.lng, lngLat.lat]
 					},
 					properties: {
 						id: String(new Date().getTime())
@@ -89,20 +95,25 @@
 
 			if (geojson.features.length > 1) {
 				linestring.geometry.coordinates = geojson.features.map(
-					(point) => point.geometry.coordinates
+					(point: Feature<Geometry, GeoJsonProperties>) => {
+						if (point.geometry.type === 'Point') {
+							return point.geometry.coordinates;
+						} else if (point.geometry.type === 'LineString') {
+							return point.geometry.coordinates[0];
+						} else {
+							throw new Error('Unsupported geometry type');
+						}
+					}
 				);
 
 				geojson.features.push(linestring);
 
 				// Populate the distanceContainer with total distance
-				// const value = document.createElement('pre');
 				distance = length(linestring);
-				// value.textContent = `Total distance: ${distance.toLocaleString()}km`;
-
-				// TODO: distanceContainer.appendChild(value);
 			}
 
-			map.getSource('geojson').setData(geojson);
+			const geojsonSource = map.getSource('geojson') as mapboxgl.GeoJSONSource;
+			geojsonSource.setData(geojson);
 		});
 	});
 
@@ -116,8 +127,9 @@
 	});
 
 	function clear() {
+		const geojsonSource = map.getSource('geojson') as mapboxgl.GeoJSONSource;
 		geojson.features = [];
-		map.getSource('geojson').setData(geojson);
+		geojsonSource.setData(geojson);
 		distance = 0;
 	}
 </script>

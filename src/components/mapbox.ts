@@ -6,4 +6,8 @@ mapbox.accessToken = PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 const key = Symbol();
 
-export { mapbox, key };
+interface MapContext {
+    getMap: () => mapboxgl.Map;
+}
+
+export { mapbox, key, type MapContext };
