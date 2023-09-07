@@ -14,7 +14,9 @@
 
 	setContext(key, mapboxContext);
 
-	export let zoom: number = 8;
+	export let zoom: number = 15;
+	export let maxZoom: number = 17;
+	export let minZoom: number = 11;
 	export let center: mapbox.LngLatLike | undefined = undefined;
 	export let bounds: mapbox.LngLatBoundsLike | undefined = undefined;
 
@@ -27,8 +29,13 @@
 			style: 'mapbox://styles/mapbox/light-v9',
 			zoom,
 			center,
-			bounds
+			bounds,
+			maxZoom,
+			minZoom
 		});
+
+		const nav = new mapbox.NavigationControl({ showCompass: false });
+		map.addControl(nav, 'top-right');
 	});
 
 	onDestroy(() => {
