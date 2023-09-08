@@ -26,7 +26,7 @@
 	onMount(() => {
 		map = new mapbox.Map({
 			container,
-			style: 'mapbox://styles/mapbox/light-v9',
+			style: 'mapbox://styles/dublininquirer/clm9i8cn6014y01nz6lym1sro',
 			zoom,
 			center,
 			bounds,

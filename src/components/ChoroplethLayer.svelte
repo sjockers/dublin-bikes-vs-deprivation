@@ -91,24 +91,14 @@
 
 	onMount(() => {
 		map.on('load', () => {
-			map.addSource('choropleth', {
-				type: 'geojson',
-				data: `${assets}/data/deprivation_by_ed.geojson`
-			});
-
-			map.addLayer({
-				id: 'choropleth-layer',
-				type: 'fill',
-				source: 'choropleth',
-				paint: {
-					// 'fill-color': {
-					// 	property: 'HP2016rel',
-					// 	stops
-					// },
-					'fill-color': ['step', ['get', 'HP2016rel'], ...getStepsFromCategories()],
-					'fill-opacity': 0.4
-				}
-			});
+			// The layer 'deprivation-by-ed' is a choropleth layer that contains the deprivation index
+			// It has been added to the mapbox studio style for better performance
+			map.setPaintProperty('deprivation-by-ed', 'fill-opacity', 0.25);
+			map.setPaintProperty('deprivation-by-ed', 'fill-color', [
+				'step',
+				['get', 'HP2016rel'],
+				...getStepsFromCategories()
+			]);
 
 			// Add a popup to display information about the feature when the user clicks on it
 			const popup = new mapbox.Popup({
@@ -116,7 +106,7 @@
 				closeOnClick: false
 			});
 
-			map.on('mousemove', 'choropleth-layer', ({ features = [], lngLat }) => {
+			map.on('mousemove', 'deprivation-by-ed', ({ features = [], lngLat }) => {
 				// Get the feature that the user is hovering over
 				const { properties } = features[0];
 				if (!properties) return;
@@ -134,7 +124,7 @@
 				popup.setLngLat(lngLat).setHTML(tooltipText).addTo(map);
 			});
 
-			map.on('mouseleave', 'choropleth-layer', () => {
+			map.on('mouseleave', 'deprivation-by-ed', () => {
 				// Reset the cursor style when the user stops hovering over the feature
 				map.getCanvas().style.cursor = '';
 
