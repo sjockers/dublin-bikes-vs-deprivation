@@ -34,6 +34,11 @@
 			minZoom
 		});
 
+		// Disable interactions
+		map.scrollZoom.disable();
+		map.dragRotate.disable();
+
+		// Add navigation controls
 		const nav = new mapbox.NavigationControl({ showCompass: false });
 		map.addControl(nav, 'top-right');
 	});
