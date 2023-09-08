@@ -21,20 +21,14 @@
 
 	onMount(() => {
 		map.on('load', () => {
-			map.addSource('planned-network', {
-				type: 'geojson',
-				data: `${assets}/data/planned_network.geojson`
-			});
-
-			map.addLayer({
-				id: 'planned-network-layer',
-				type: 'fill',
-				source: 'planned-network',
-				paint: {
-					'fill-opacity': 1,
-					'fill-color': ['match', ['get', 'Project_Status'], ...colorStops, '#000']
-				}
-			});
+			// Layers have been added to the mapbox style for better performance
+			map.setPaintProperty('activetravel-network', 'line-opacity', 0.9);
+			map.setPaintProperty('activetravel-network', 'line-color', [
+				'match',
+				['get', 'Project_Status'],
+				...colorStops,
+				'#000'
+			]);
 
 			// Add a popup to display information about the feature when the user clicks on it
 			const popup = new mapbox.Popup({
@@ -42,7 +36,7 @@
 				closeOnClick: false
 			});
 
-			map.on('mousemove', 'planned-network-layer', ({ features = [], lngLat }) => {
+			map.on('mousemove', 'activetravel-network-outlines', ({ features = [], lngLat }) => {
 				// Get the feature that the user is hovering over
 				const { properties } = features[0];
 				if (!properties) return;
@@ -54,7 +48,7 @@
 				const color = CATEGORIES[status];
 
 				// Set the popup content
-				let tooltipText = `<b>${properties.Description}</b>`;
+				let tooltipText = `<b>${properties.description}</b>`;
 				tooltipText += `<br>Project status: `;
 				tooltipText += `<b style="color:${color}">${properties.Project_Status}</b>`;
 				tooltipText += `<br>Delivery phase: ${properties.Delivery_Phase}`;
@@ -62,7 +56,7 @@
 				popup.setLngLat(lngLat).setHTML(tooltipText).addTo(map);
 			});
 
-			map.on('mouseleave', 'planned-network-layer', () => {
+			map.on('mouseleave', 'activetravel-network-outlines', () => {
 				// Reset the cursor style when the user stops hovering over the feature
 				map.getCanvas().style.cursor = '';
 
