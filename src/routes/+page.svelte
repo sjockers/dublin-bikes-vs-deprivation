@@ -3,6 +3,8 @@
 	import ChoroplethLayer from '../components/ChoroplethLayer.svelte';
 	import NetworkLayer from '../components/NetworkLayer.svelte';
 	import MeassurementLayer from '../components/MeassurementLayer.svelte';
+	import '@fontsource/karla/400.css';
+	import '@fontsource/karla/700.css';
 
 	let meassurementLayerActive = false;
 </script>
@@ -14,7 +16,6 @@
 		[-6.1148829, 53.4105416]
 	]}
 >
-	<!-- TODO: Add extra layer for map labels? -->
 	<ChoroplethLayer />
 
 	<NetworkLayer />
@@ -41,6 +42,9 @@
 		padding: 0;
 		width: 100%;
 		border: none;
+		background: rgb(243, 241, 235);
+		font-family: 'Karla', sans-serif;
+		font-size: 16px;
 	}
 
 	.activate-meassurement {
