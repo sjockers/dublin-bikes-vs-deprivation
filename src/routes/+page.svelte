@@ -3,13 +3,14 @@
 	import ChoroplethLayer from '../components/ChoroplethLayer.svelte';
 	import NetworkLayer from '../components/NetworkLayer.svelte';
 	import MeassurementLayer from '../components/MeassurementLayer.svelte';
+	import ChoroplethLegend from '../components/ChoroplethLegend.svelte';
 	import '@fontsource/karla/400.css';
 	import '@fontsource/karla/700.css';
 
 	let meassurementLayerActive = false;
 </script>
 
-<!-- TODO: Use bounding box instead of lat/lon? -->
+<ChoroplethLegend />
 <Map
 	bounds={[
 		[-6.3870259, 53.2987342],

@@ -48,16 +48,37 @@
 	});
 </script>
 
-<div class="map-container" bind:this={container}>
-	{#if map}
-		<slot />
-	{/if}
+<div class="map-container">
+	<div class="map" bind:this={container}>
+		{#if map}
+			<slot />
+		{/if}
+	</div>
 </div>
 
 <style>
-	.map-container {
+	.map {
 		width: 100%;
 		height: 100vh;
 		position: relative;
+		z-index: 0;
+	}
+
+	.map-container {
+		position: relative;
+		z-index: 5;
+	}
+
+	.map:before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: block;
+		z-index: 10;
+		pointer-events: none;
+		box-shadow: inset 0px 0px 30px 5px rgba(0, 0, 0, 0.2);
 	}
 </style>
