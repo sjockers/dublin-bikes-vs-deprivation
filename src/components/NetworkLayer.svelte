@@ -23,12 +23,12 @@
 		map.on('load', () => {
 			// Layers have been added to the mapbox style for better performance
 			map.setPaintProperty('activetravel-network', 'line-opacity', 0.9);
-			map.setPaintProperty('activetravel-network', 'line-color', [
-				'match',
-				['get', 'Project_Status'],
-				...colorStops,
-				'#000'
-			]);
+			// map.setPaintProperty('activetravel-network', 'line-color', [
+			// 	'match',
+			// 	['get', 'Project_Status'],
+			// 	...colorStops,
+			// 	'#000'
+			// ]);
 
 			// Add a popup to display information about the feature when the user clicks on it
 			const popup = new mapbox.Popup({
