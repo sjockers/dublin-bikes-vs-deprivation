@@ -37,7 +37,7 @@
 		font-size: 14px;
 		color: #666;
 
-		@media (min-width: 740px) {
+		@media (min-width: 660px) {
 			position: absolute;
 			bottom: 0;
 			right: 0;

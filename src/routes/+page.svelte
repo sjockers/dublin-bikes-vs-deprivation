@@ -10,6 +10,7 @@
 	import '@fontsource/karla/700.css';
 
 	let meassurementLayerActive = false;
+	let choroplethDetails = null;
 </script>
 
 <div class="map-layout">
@@ -20,7 +21,7 @@
 				[-6.1148829, 53.4105416]
 			]}
 		>
-			<ChoroplethLayer />
+			<ChoroplethLayer showDetails={(details) => (choroplethDetails = details)} />
 
 			<NetworkLayer />
 
@@ -36,7 +37,7 @@
 
 	<div class="sidebar">
 		<NetworkLegend />
-		<ChoroplethLegend />
+		<ChoroplethLegend {choroplethDetails} />
 		<Credits />
 	</div>
 </div>

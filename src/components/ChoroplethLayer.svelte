@@ -3,6 +3,8 @@
 	import { mapbox, key, type MapContext } from './mapbox';
 	import { choroplethScale } from '$lib/choroplethScale';
 
+	export let showDetails: (details: any) => void;
+
 	const { getMap } = getContext<MapContext>(key);
 	const map = getMap();
 
@@ -47,25 +49,16 @@
 				const { properties } = features[0];
 				if (!properties) return;
 
-				// Change the cursor style as a UI indicator
-				map.getCanvas().style.cursor = 'pointer';
-
-				// Get the category
-				const { color, title } = getCategory(properties.HP2016rel);
-
-				// Set the popup content
-				let tooltipText = `<b>${properties.ED_Name}:</b>`;
-				tooltipText += `<br>Deprivation index: ${properties.HP2016rel}`;
-				tooltipText += `<br><b style="background:${color}">${title}</b>`;
-				popup.setLngLat(lngLat).setHTML(tooltipText).addTo(map);
+				showDetails({
+					name: properties.ED_Name,
+					deprivationIndex: properties.HP2016rel,
+					category: getCategory(properties.HP2016rel)
+				});
 			});
 
 			map.on('mouseleave', 'deprivation-by-ed', () => {
-				// Reset the cursor style when the user stops hovering over the feature
-				map.getCanvas().style.cursor = '';
-
-				// Remove the popup
-				popup.remove();
+				// Remove the details
+				showDetails(null);
 			});
 		});
 	});

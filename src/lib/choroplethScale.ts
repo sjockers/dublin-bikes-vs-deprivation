@@ -15,37 +15,37 @@ export const choroplethScale = [
     {
         stop: -30,
         range: '-20 to -30',
-        title: 'very disadvantaged',
+        title: 'Very disadvantaged',
         color: '#AE3C1C' // 'red'
     },
     {
         stop: -20,
         range: '-10 to -20',
-        title: 'disadvantaged',
+        title: 'Disadvantaged',
         color: '#E4A679' // 'orange'
     },
     {
         stop: -10,
         range: '0 to -10',
-        title: 'marginally below average',
+        title: 'Marginally below average',
         color: '#EFDFC6' // 'light orange'
     },
     {
         stop: 0,
         range: '0 to 10',
-        title: 'marginally above average',
+        title: 'Marginally above average',
         color: '#DADEC6' // 'light green'
     },
     {
         stop: 10,
         range: '10 to 20',
-        title: 'affluent',
+        title: 'Affluent',
         color: '#94B59E' // 'medium green'
     },
     {
         stop: 20,
         range: '20 to 30',
-        title: 'very affluent ',
+        title: 'Very affluent ',
         color: '#167456' // 'medium blue'
     },
 ];
