@@ -5,6 +5,7 @@
 	import MeassurementLayer from '../components/MeassurementLayer.svelte';
 	import ChoroplethLegend from '../components/ChoroplethLegend.svelte';
 	import NetworkLegend from '../components/NetworkLegend.svelte';
+	import Credits from '../components/Credits.svelte';
 	import '@fontsource/karla/400.css';
 	import '@fontsource/karla/700.css';
 
@@ -30,18 +31,13 @@
 					Measure distance
 				</button>
 			{/if}
-
-			<!-- TODO: Add bike path layer here -->
-
-			<!-- TODO: Add bus connect layer (?) -->
-
-			<!-- TODO: Add choropleth layer (deprivation) -->
 		</Map>
 	</div>
 
 	<div class="sidebar">
 		<NetworkLegend />
 		<ChoroplethLegend />
+		<Credits />
 	</div>
 </div>
 
@@ -68,6 +64,10 @@
 		height: calc(100vh - 100px);
 	}
 
+	.sidebar {
+		position: relative;
+	}
+
 	.activate-meassurement {
 		position: absolute;
 		top: 10px;
@@ -88,7 +88,7 @@
 
 		.sidebar {
 			flex: 1;
-			margin-left: 15px;
+			margin: 0 15px;
 		}
 	}
 
