@@ -29,14 +29,13 @@
 
 <style>
 	.network-legend {
-		max-width: 400px;
-		margin-bottom: 2em;
+		margin-bottom: 20px;
 	}
 
 	.color-swatch {
 		display: inline-block;
 		height: 4px;
-		width: calc(100% / 6);
+		width: 20px;
 		vertical-align: middle;
 		border-radius: 2px;
 		margin-right: 0.2em;
@@ -61,5 +60,17 @@
 	li {
 		position: relative;
 		list-style: none;
+		display: inline-block;
+		margin-right: 20px;
+	}
+
+	@media (min-width: 740px) {
+		li {
+			display: block;
+		}
+
+		.color-swatch {
+			width: calc(100% / 6);
+		}
 	}
 </style>

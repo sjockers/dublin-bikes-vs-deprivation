@@ -61,11 +61,13 @@
 
 	.main {
 		position: relative;
-		height: calc(100vh - 100px);
+		height: calc(100vh - 290px);
 	}
 
 	.sidebar {
 		position: relative;
+		font-size: 15px;
+		margin: 15px;
 	}
 
 	.activate-meassurement {
@@ -74,9 +76,16 @@
 		left: 10px;
 		z-index: 1;
 		display: flex;
+		box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+		background-color: #fff;
+		border: 0;
+		border-radius: 2px;
+		box-sizing: border-box;
+		cursor: pointer;
+		padding: 2px 4px;
 	}
 
-	@media (min-width: 784px) {
+	@media (min-width: 660px) {
 		.map-layout {
 			display: flex;
 			flex-direction: row;
@@ -87,24 +96,18 @@
 		}
 
 		.sidebar {
-			flex: 1;
+			flex: 0 0 220px;
 			margin: 0 15px;
 		}
 	}
 
 	@media (min-width: 800px) {
 		.main {
-			flex: 0 0 70%;
+			flex: 1;
 		}
 
 		.sidebar {
 			margin-left: 20px;
-		}
-	}
-
-	@media (min-width: 1100px) {
-		.main {
-			flex: 0 0 80%;
 		}
 	}
 </style>

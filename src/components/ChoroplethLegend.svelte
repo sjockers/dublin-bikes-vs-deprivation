@@ -19,7 +19,6 @@
 <style>
 	.choropleth-legend {
 		position: relative;
-		max-width: 320px;
 		overflow: hidden;
 		margin-bottom: 1em;
 	}
@@ -54,7 +53,7 @@
 	ul {
 		display: flex;
 		width: 100%;
-		margin: 0.2em 0;
+		margin: 0.4em 0 0.2em;
 		padding: 0;
 		z-index: 1;
 	}

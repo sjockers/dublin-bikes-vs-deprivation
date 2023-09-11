@@ -34,14 +34,21 @@
 
 <style>
 	.data-source {
-		position: absolute;
-		bottom: 0;
-		right: 0;
 		font-size: 14px;
 		color: #666;
+
+		@media (min-width: 740px) {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+		}
 	}
 
 	.data-source a {
 		color: inherit;
+	}
+
+	.data-source p {
+		margin-bottom: 0;
 	}
 </style>
