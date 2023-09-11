@@ -36,7 +36,7 @@
 				closeOnClick: false
 			});
 
-			map.on('mousemove', 'activetravel-network-outlines', ({ features = [], lngLat }) => {
+			map.on('mousemove', 'activetravel-network-interaction', ({ features = [], lngLat }) => {
 				// Get the feature that the user is hovering over
 				const { properties } = features[0];
 				if (!properties) return;
@@ -56,7 +56,7 @@
 				popup.setLngLat(lngLat).setHTML(tooltipText).addTo(map);
 			});
 
-			map.on('mouseleave', 'activetravel-network-outlines', () => {
+			map.on('mouseleave', 'activetravel-network-interaction', () => {
 				// Reset the cursor style when the user stops hovering over the feature
 				map.getCanvas().style.cursor = '';
 

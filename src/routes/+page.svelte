@@ -4,6 +4,7 @@
 	import NetworkLayer from '../components/NetworkLayer.svelte';
 	import MeassurementLayer from '../components/MeassurementLayer.svelte';
 	import ChoroplethLegend from '../components/ChoroplethLegend.svelte';
+	import NetworkLegend from '../components/NetworkLegend.svelte';
 	import '@fontsource/karla/400.css';
 	import '@fontsource/karla/700.css';
 
@@ -39,6 +40,7 @@
 	</div>
 
 	<div class="sidebar">
+		<NetworkLegend />
 		<ChoroplethLegend />
 	</div>
 </div>
