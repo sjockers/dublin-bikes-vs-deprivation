@@ -6,29 +6,10 @@
 	const { getMap } = getContext<MapContext>(key);
 	const map = getMap();
 
-	const CATEGORIES: { [key: string]: string } = {
-		'Scope and Purpose': '#EF1313',
-		'Design and Consultation': '#EC731B',
-		'Construction and Implementation': '#3820E9',
-		Complete: '#51BE51'
-	};
-
-	const colorStops: string[] = [];
-	Object.entries(CATEGORIES).map(([key, value]) => {
-		colorStops.push(key);
-		colorStops.push(value);
-	});
-
 	onMount(() => {
 		map.on('load', () => {
 			// Layers have been added to the mapbox style for better performance
 			map.setPaintProperty('activetravel-network', 'line-opacity', 0.9);
-			// map.setPaintProperty('activetravel-network', 'line-color', [
-			// 	'match',
-			// 	['get', 'Project_Status'],
-			// 	...colorStops,
-			// 	'#000'
-			// ]);
 
 			// Add a popup to display information about the feature when the user clicks on it
 			const popup = new mapbox.Popup({
@@ -36,7 +17,7 @@
 				closeOnClick: false
 			});
 
-			map.on('mousemove', 'activetravel-network-interaction', ({ features = [], lngLat }) => {
+			map.on('mousemove', 'full-network-interaction', ({ features = [], lngLat }) => {
 				// Get the feature that the user is hovering over
 				const { properties } = features[0];
 				if (!properties) return;
@@ -44,19 +25,28 @@
 				// Change the cursor style as a UI indicator
 				map.getCanvas().style.cursor = 'pointer';
 
-				const status: string = properties.Project_Status;
-				const color = CATEGORIES[status];
+				const { Project_Status: status, Delivery_Phase: phase, Type: type } = properties;
 
 				// Set the popup content
-				let tooltipText = `<b>${properties.description}</b>`;
-				tooltipText += `<br>Project status: `;
-				tooltipText += `<b style="color:${color}">${properties.Project_Status}</b>`;
-				tooltipText += `<br>Delivery phase: ${properties.Delivery_Phase}`;
-				tooltipText += `<br>Interim scheme: ${properties.Interim_Scheme}`;
+				let tooltipText = `<b>${properties.description}</b><br/>`;
+
+				// AcT network
+				if (status) {
+					tooltipText += `<b class="${status === 'Complete' ? 'complete' : 'progress'}">`;
+					tooltipText += `Status: ${status}</b>`;
+					tooltipText += `<br>(Delivery phase: ${phase})`;
+				}
+
+				// BusConnects
+				else {
+					tooltipText += `<b class="bus">BusConnect</b>`;
+					tooltipText += `<br>(${type} route)`;
+				}
+
 				popup.setLngLat(lngLat).setHTML(tooltipText).addTo(map);
 			});
 
-			map.on('mouseleave', 'activetravel-network-interaction', () => {
+			map.on('mouseleave', 'full-network-interaction', () => {
 				// Reset the cursor style when the user stops hovering over the feature
 				map.getCanvas().style.cursor = '';
 
@@ -66,3 +56,22 @@
 		});
 	});
 </script>
+
+<style>
+	:global(.mapboxgl-popup) {
+		font-family: 'Karla', sans-serif;
+		line-height: 1.3;
+	}
+
+	:global(.mapboxgl-popup .complete) {
+		color: #92ba4a;
+	}
+
+	:global(.mapboxgl-popup .progress) {
+		color: #cf663c;
+	}
+
+	:global(.mapboxgl-popup .bus) {
+		color: #3baab4;
+	}
+</style>
